@@ -43,7 +43,7 @@ const cadastrarProduto = async (req, res) => {
   }
 };
 
-const atualizarProduto = async (req, res) => {
+export const atualizarProduto = async (req, res) => {
   const { id } = req.params;
   const { quantidade_estoque, nome, preco, descricao } = req.body;
 
@@ -57,35 +57,24 @@ const atualizarProduto = async (req, res) => {
       return res.status(404).json({ mensagem: "Produto não encontrado" });
     }
 
-    const camposAtualizacao = {};
-
-    if (quantidade_estoque)
-      camposAtualizacao.quantidade_estoque = quantidade_estoque;
-    if (nome) camposAtualizacao.nome = nome;
-    if (preco) camposAtualizacao.preco = preco;
-    if (descricao) camposAtualizacao.descricao = descricao;
-
-    if (Object.keys(camposAtualizacao).length === 0) {
+    if (!quantidade_estoque || !nome || !preco || !descricao) {
       return res
         .status(400)
-        .json({ mensagem: "Nenhum campo de atualização fornecido" });
+        .json({ mensagem: "Todos os campos são obrigatórios para atualização" });
     }
 
     const query = {
       text:
-        "update produtos set " +
-        Object.keys(camposAtualizacao)
-          .map((campo, index) => `${campo} = $${index + 1}`)
-          .join(", ") +
-        ` where id = $${Object.keys(camposAtualizacao).length + 1}`,
-      values: [...Object.values(camposAtualizacao), id],
+        "update produtos set quantidade_estoque = $1, nome = $2, preco = $3, descricao = $4 where id = $5",
+      values: [quantidade_estoque, nome, preco, descricao, id],
     };
 
     await pool.query(query);
 
     return res.status(201).json({ message: "Produto atualizado com sucesso" });
   } catch (error) {
-    return res.status(500).json("Erro interno do servidor");
+    console.error("Erro:", error);
+    return res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
 };
 
