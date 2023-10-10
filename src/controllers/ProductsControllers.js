@@ -34,11 +34,10 @@ const cadastrarProduto = async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      "insert into produtos (nome, preco, quantidade_estoque,descricao) values ($1, $2, $3, $4, ) returning *",
+      "insert into produtos (nome,preco,quantidade_estoque,descricao) values ($1, $2, $3, $4)",
       [nome, preco, quantidade_estoque, descricao]
     );
-
-    return res.status(201).json(rows[0]);
+    return res.status(201).json({ message: "Produto criado com sucesso" });
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }
@@ -59,7 +58,7 @@ const atualizarProduto = async (req, res) => {
     }
 
     await pool.query(
-      "update produtos set nome = $1, preco = $2,  quantidade_estoque= $3, descricao = $5 where id = $6",
+      "update produtos set nome = $1, preco = $2,quantidade_estoque= $3, descricao = $5 where id = $6",
       [nome, preco, quantidade_estoque, descricao, id]
     );
 

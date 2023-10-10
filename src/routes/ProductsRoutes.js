@@ -8,10 +8,10 @@ const {
   excluirProduto,
 } = require("./../controllers/ProductsControllers");
 
-rotas.get("/produto", listarProdutos);
-rotas.get("/produto/:id", detalharProduto);
-rotas.post("/produto", cadastrarProduto);
-rotas.put("/produto/:id", atualizarProduto);
-rotas.delete("/produto/:id", excluirProduto);
+route.get("/produto", listarProdutos);
+route.get("/produto/:id", detalharProduto);
+route.post("/produto", cadastrarProduto);
+route.put("/produto/:id", atualizarProduto);
+route.delete("/produto/:id", excluirProduto);
 
 module.exports = route;
