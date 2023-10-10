@@ -5,10 +5,13 @@ const {
   cadastrarProduto,
   detalharProduto,
   listarProdutos,
-  deletarProduto,
+  excluirProduto,
 } = require("./../controllers/ProductsControllers");
 
-route.post("/cadastro", (req, res) => {});
-route.post("/login", (req, res) => {});
+rotas.get("/produto", listarProdutos);
+rotas.get("/produto/:id", detalharProduto);
+rotas.post("/produto", cadastrarProduto);
+rotas.put("/produto/:id", atualizarProduto);
+rotas.delete("/produto/:id", excluirProduto);
 
 module.exports = route;
