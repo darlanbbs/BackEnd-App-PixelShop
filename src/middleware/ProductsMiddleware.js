@@ -1,7 +1,7 @@
 const pool = require("../connection/Connection");
 
 const verificarProdutoExistente = async (req, res, next) => {
-  const { nome } = req.body;
+  const { nome, quantidade_estoque } = req.body;
 
   try {
     const { rows, rowCount } = await pool.query(
@@ -11,6 +11,9 @@ const verificarProdutoExistente = async (req, res, next) => {
 
     if (rowCount > 0) {
       return res.status(400).json({ mensagem: "Produto já existe" });
+    }
+    if (quantidade_estoque < 0) {
+      return res.status(400).json({ mensagem: "Quantidade inválida" });
     }
 
     next();

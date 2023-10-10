@@ -15,8 +15,7 @@ const {
 route.get("/produto", listarProdutos);
 route.get("/produto/:id", detalharProduto);
 route.delete("/produto/:id", excluirProduto);
-verificarQuantidadeEstoque();
 route.post("/produto", verificarProdutoExistente, cadastrarProduto);
-route.put("/produto/:id", atualizarProduto);
+route.put("/produto/:id", verificarQuantidadeEstoque, atualizarProduto);
 
 module.exports = route;
