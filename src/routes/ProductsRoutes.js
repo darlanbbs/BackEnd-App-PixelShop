@@ -7,12 +7,16 @@ const {
   listarProdutos,
   excluirProduto,
 } = require("./../controllers/ProductsControllers");
-const verificarProdutoExistente = require("../middleware/ProductsMiddleware");
+const {
+  verificarProdutoExistente,
+  verificarQuantidadeEstoque,
+} = require("../middleware/ProductsMiddleware");
 
 route.get("/produto", listarProdutos);
 route.get("/produto/:id", detalharProduto);
+route.delete("/produto/:id", excluirProduto);
+verificarQuantidadeEstoque();
 route.post("/produto", verificarProdutoExistente, cadastrarProduto);
 route.put("/produto/:id", atualizarProduto);
-route.delete("/produto/:id", excluirProduto);
 
 module.exports = route;
