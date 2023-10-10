@@ -57,12 +57,33 @@ const atualizarProduto = async (req, res) => {
       return res.status(404).json({ mensagem: "Produto não encontrado" });
     }
 
-    await pool.query(
-      "update produtos set nome = $1, preco = $2,quantidade_estoque= $3, descricao = $5 where id = $6",
-      [nome, preco, quantidade_estoque, descricao, id]
-    );
+    const camposAtualizacao = {};
 
-    return res.status(204).send();
+    if (quantidade_estoque)
+      camposAtualizacao.quantidade_estoque = quantidade_estoque;
+    if (nome) camposAtualizacao.nome = nome;
+    if (preco) camposAtualizacao.preco = preco;
+    if (descricao) camposAtualizacao.descricao = descricao;
+
+    if (Object.keys(camposAtualizacao).length === 0) {
+      return res
+        .status(400)
+        .json({ mensagem: "Nenhum campo de atualização fornecido" });
+    }
+
+    const query = {
+      text:
+        "update produtos set " +
+        Object.keys(camposAtualizacao)
+          .map((campo, index) => `${campo} = $${index + 1}`)
+          .join(", ") +
+        ` where id = $${Object.keys(camposAtualizacao).length + 1}`,
+      values: [...Object.values(camposAtualizacao), id],
+    };
+
+    await pool.query(query);
+
+    return res.status(201).json({ message: "Produto atualizado com sucesso" });
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }
@@ -83,7 +104,7 @@ const excluirProduto = async (req, res) => {
 
     await pool.query("delete from produtos where id = $1", [id]);
 
-    return res.status(204).send();
+    return res.status(204).json({ mensagem: "Produto excluído com sucesso" });
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }
