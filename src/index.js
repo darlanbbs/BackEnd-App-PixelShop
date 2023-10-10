@@ -8,4 +8,4 @@ app.use(express.json());
 
 app.use(route);
 
-app.listen(3000);
+app.listen('postgres://rcssrxkl:k6AnqcZGq8T1P4lZ1_r-wqQ7NLRF8x6b@tuffi.db.elephantsql.com/rcssrxkl');
