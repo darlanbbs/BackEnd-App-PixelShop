@@ -43,38 +43,18 @@ const cadastrarProduto = async (req, res) => {
   }
 };
 
-export const atualizarProduto = async (req, res) => {
+const atualizarProduto = async (req, res) => {
   const { id } = req.params;
   const { quantidade_estoque, nome, preco, descricao } = req.body;
 
   try {
-    const { rows, rowCount } = await pool.query(
-      "select * from produtos where id = $1",
-      [id]
+    await pool.query(
+      "update produtos set nome = $1, preco = $2, quantidade_estoque = $3, descricao = $4 where id = $5",
+      [nome, preco, quantidade_estoque, descricao, id]
     );
-
-    if (rowCount < 1) {
-      return res.status(404).json({ mensagem: "Produto não encontrado" });
-    }
-
-    if (!quantidade_estoque || !nome || !preco || !descricao) {
-      return res
-        .status(400)
-        .json({ mensagem: "Todos os campos são obrigatórios para atualização" });
-    }
-
-    const query = {
-      text:
-        "update produtos set quantidade_estoque = $1, nome = $2, preco = $3, descricao = $4 where id = $5",
-      values: [quantidade_estoque, nome, preco, descricao, id],
-    };
-
-    await pool.query(query);
-
-    return res.status(201).json({ message: "Produto atualizado com sucesso" });
+    return res.status(200).json({ message: "Produto atualizado com sucesso" });
   } catch (error) {
-    console.error("Erro:", error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor" });
+    return res.status(500).json("Erro interno do servidor");
   }
 };
 

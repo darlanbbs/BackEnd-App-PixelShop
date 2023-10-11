@@ -32,10 +32,10 @@ const verificarQuantidadeEstoque = async (req, res, next) => {
       [id]
     );
 
-    if (quantidade_estoque >= 0) {
-      next();
+    if (quantidade_estoque < 0) {
+      return res.status(400).json({ mensagem: "Quantidade inválida" });
     }
-    return res.status(400).json({ mensagem: "Quantidade inválida" });
+    next();
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }
