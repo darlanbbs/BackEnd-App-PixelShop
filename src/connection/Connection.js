@@ -1,14 +1,19 @@
-require("dotenv/config");
-const user = process.env.USER;
-const password = process.env.PASSWORD;
 const { Pool } = require("pg");
+require("dotenv").config();
+
+const user = process.env.USERNAME;
+const password = process.env.PASS;
+const host = process.env.EXTERNALLINK;
+const port = process.env.PORT;
+const database = process.env.DATABASE;
 
 const pool = new Pool({
-  host: "localhost",
-  port: 5432,
-  user,
+  user: "postgre",
+  host,
+  database,
   password,
-  database: "dompixelshop",
+  port,
+  ssl: true,
 });
 
 module.exports = pool;

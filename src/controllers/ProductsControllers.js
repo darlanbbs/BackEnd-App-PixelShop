@@ -4,9 +4,9 @@ const listarProdutos = async (req, res) => {
   try {
     const { rows } = await pool.query("select * from produtos");
 
-    return res.json(rows);
+    return res.send(rows);
   } catch (error) {
-    return res.status(500).json("Erro interno do servidor");
+    return res.status(500).json(`Erro interno do servidor ${error}`);
   }
 };
 
